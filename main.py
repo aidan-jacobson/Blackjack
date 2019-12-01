@@ -1,3 +1,4 @@
+# NON cardcounting version
 from __future__ import division
 from blackjack import BlackJackRound, sumCardsSoft, sumCardsHard
 from re import sub
