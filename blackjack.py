@@ -1,3 +1,4 @@
+# cardcounting version
 from random import shuffle
 
 def sumCardsSoft(cardList):
