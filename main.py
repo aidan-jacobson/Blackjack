@@ -2,6 +2,8 @@
 from __future__ import division
 from blackjack import BlackJackRound, sumCardsSoft, sumCardsHard
 from re import sub
+import sys
+
 softTotals = [
   [1, 1, 1, 2, 2, 1, 1, 1, 1, 1], #13
   [1, 1, 1, 2, 2, 1, 1, 1, 1, 1],
@@ -68,7 +70,7 @@ def userFunc(userHand, dealerHand, numberOfSplits):
 
 
 # Parameters
-filename = "output.csv"
+filename = sys.argv[1]
 initialMoney = 5000
 bet = 5
 iters = 10000
