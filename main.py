@@ -1,7 +1,19 @@
 # cardcounting version
 from __future__ import division
-from blackjack import BlackJackRound, sumCardsSoft, sumCardsHard
+from blackjack import BlackJackRound, sumCardsSoft, sumCardsHard, createDeck
 from re import sub
+import sys
+def getCardValue(card):
+  if (card is "2"): return 1
+  if (card is "3"): return 1
+  if (card is "4"): return 1
+  if (card is "5"): return 1
+  if (card is "6"): return 1
+  if (card is "7"): return 0
+  if (card is "8"): return 0
+  if (card is "9"): return 0
+  if (card is "J" or card is "Q" or card is "K" or card is "A"): return -1
+
 softTotals = [
   [1, 1, 1, 2, 2, 1, 1, 1, 1, 1], #13
   [1, 1, 1, 2, 2, 1, 1, 1, 1, 1],
@@ -68,24 +80,73 @@ def userFunc(userHand, dealerHand, numberOfSplits):
 
 
 # Parameters
-filename = "output.csv"
+filename = sys.argv[1]
 initialMoney = 5000
-bet = 100
+bet = 5
 iters = 2000
 breakWhenBroke = False
+numberOfDecks = 6
+reshuffleThreshold = 0.25
+
+def getBet(trueCount):
+  if (trueCount < -2):
+    return 5
+  if (trueCount >= -2 and trueCount < -1):
+    return 5
+  if (trueCount >= -1 and trueCount < 0):
+    return 5
+  if (trueCount >= 0 and trueCount < 1):
+    return 5
+  if (trueCount >= 1 and trueCount < 2):
+    return 10
+  if (trueCount >= 2 and trueCount < 3):
+    return 20
+  if (trueCount >= 3 and trueCount < 4):
+    return 30
+  if (trueCount >= 4 and trueCount < 5):
+    return 40
+  if (trueCount >= 5 and trueCount < 6):
+    return 50
+  if (trueCount >= 6):
+    return 60
 
 
 # Start main program
 print("Program start")
 history = [[-1, initialMoney, "Start"]]
 
+deck = createDeck(numberOfDecks)
+startingAmt = len(deck)
 money = initialMoney
+trueCount = 0
+tcfile = open(sys.argv[2], "w+")
+tcfile.write("Round,True Count\n")
 for i in range(0, iters):
   money -= bet
-  round = BlackJackRound(6, bet)
+  round = BlackJackRound(deck, bet)
   round.setUserFunc(userFunc)
   result = round.runRound()
-  [back, output, outputType] = result
+  [back, output, outputType, userHands, dealerHand] = result
+  runningCount = 0
+  outhand = []
+  for hand in userHands:
+    for card in hand.cards:
+      runningCount += getCardValue(card)
+      outhand.append(card)
+  for card in dealerHand:
+    runningCount += getCardValue(card)
+    outhand.append(card)
+  trueCount += runningCount / numberOfDecks
+  if i < 50: tcfile.write("{},{}\n".format(i+1, trueCount))
+  bet = getBet(trueCount)
+  #if (i < 100):
+    #print("Truecount: {}, Bet: {}, Cards: {}".format(trueCount, bet, ",".join(outhand)))
+  if (len(deck) < reshuffleThreshold*startingAmt):
+    deck = createDeck(numberOfDecks)
+    trueCount = 0
+    print("Deck reshuffle: {}, sa: {}".format(i+1, startingAmt))
+    print(trueCount)
+
   money += back
   history.append([i, money, ["Loss: Dealer Higher", "Win: Dealer Busted", "Win: Dealer Lower", "Tie: Dealer Equal"][outputType]])
   if (money < bet and breakWhenBroke):
@@ -93,11 +154,10 @@ for i in range(0, iters):
     history.append(["", "", ""])
     history.append([i, "Broke", ""])
     break;
+tcfile.close()
 print("{}/{} rounds finished".format(i+1,iters))
 file = open(filename, "w+")
 file.write("Iteration,Balance,Output Type\n")
-
-for entry in history:
 for [i, balance, outputType] in history:
   if i is "":
     file.write(",\n")
@@ -118,3 +178,4 @@ print("===============")
 print("Remaining money: ${}".format(money))
 print("Profit: ${}".format(money-initialMoney))
 print("Percent profit: {}%".format(int((money-initialMoney)/initialMoney*100)))
+print(createDeck(1))

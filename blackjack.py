@@ -12,6 +12,7 @@ def sumCardsSoft(cardList):
     if card is "7": output += 7
     if card is "8": output += 8
     if card is "9": output += 9
+    if card is "9": output += 10
     if card in ["K", "Q", "J"]: output += 10
     if card is "A": output += 11 #count ace as 11
   return output
@@ -27,13 +28,14 @@ def sumCardsHard(cardList): #count ace as 1
     if card is "7": output += 7
     if card is "8": output += 8
     if card is "9": output += 9
+    if card is "10": output += 10
     if card in ["K", "Q", "J"]: output += 10
     if card is "A": output += 1
   return output
 
 
 def createDeck(numberOfDecks):
-  cards = ["A", "K", "Q", "J", "9", "8", "7", "6", "5", "4", "3", "2"]
+  cards = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
   out = []
   for i in range(0, numberOfDecks):
     for j in range(0, len(cards)):
@@ -43,7 +45,7 @@ def createDeck(numberOfDecks):
   return out
 
 class BlackJackRound:
-  def __init__(self, numberOfDecks, bet):
+  def __init__(self, deck, bet):
     def userFunc(uhs, dhu): pass
     self.bet = bet
     self.bet2 = 0
@@ -53,7 +55,7 @@ class BlackJackRound:
     self.dealerHandUp = []
     self.dealerHandDown = []
     self.userHands = [UserHand([])]
-    self.deck = createDeck(numberOfDecks)
+    self.deck = deck
     self.userHands[0].cards.append(self.deck.pop(0))
     self.userHands[0].cards.append(self.deck.pop(0))
     self.dealerHandUp.append(self.deck.pop(0))
@@ -113,7 +115,7 @@ class BlackJackRound:
         if (dealerTotal > 21):
           outputType = 1
           self.back += 2*self.bet
-          return [self.back, outputs[0], outputType]
+          return [self.back, outputs[0], outputType, self.userHands, self.dealerHandUp] # return value
       if (dealerTotal <= 17):
         self.dealerHandUp.append(self.deck.pop(0))
         continue
@@ -128,7 +130,7 @@ class BlackJackRound:
         elif value is dealerTotal:
           if outputType is 0: outputType = 3
           self.back += self.bet
-    return [self.back, outputs[0], outputType]
+    return [self.back, outputs[0], outputType, self.userHands, self.dealerHandUp] # return value
 
   def setUserFunc(self, func):
     self.userFunc = func
