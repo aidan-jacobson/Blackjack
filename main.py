@@ -98,17 +98,17 @@ file = open(filename, "w+")
 file.write("Iteration,Balance,Output Type\n")
 
 for entry in history:
-for [i, balance, outputType] in history:
-  if i is "":
-    file.write(",\n")
-  elif  i is -1:
-    file.write("{},{},{},,Remaining Money:,${}\n".format(i+1, balance, outputType, money))
-  elif i is 0:
-    file.write("{},{},{},,Total Profit:,${}\n".format(i+1, balance, outputType, money-initialMoney))
-  elif i is 1:
-    file.write("{},{},{},,Percent Profit:,{}%\n".format(i+1, balance, outputType, int((money-initialMoney)/initialMoney*100)))
-  else:
-    file.write("{},{},{}\n".format(i+1, balance, outputType))
+  for [i, balance, outputType] in history:
+    if i is "":
+      file.write(",\n")
+    elif  i is -1:
+      file.write("{},{},{},,Remaining Money:,${}\n".format(i+1, balance, outputType, money))
+    elif i is 0:
+      file.write("{},{},{},,Total Profit:,${}\n".format(i+1, balance, outputType, money-initialMoney))
+    elif i is 1:
+      file.write("{},{},{},,Percent Profit:,{}%\n".format(i+1, balance, outputType, int((money-initialMoney)/initialMoney*100)))
+    else:
+      file.write("{},{},{}\n".format(i+1, balance, outputType))
 file.close()
 print("{} written".format(filename))
 print("")
