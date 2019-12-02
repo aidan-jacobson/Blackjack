@@ -1,5 +1,5 @@
 # NON cardcounting version
-from random import shuffle
+import random
 
 def sumCardsSoft(cardList):
   output = 0
@@ -33,15 +33,21 @@ def sumCardsHard(cardList): #count ace as 1
     if card is "A": output += 1
   return output
 
+useSeed = True
+seed = 12345; # random seed to create consistent shuffle
 
+numberOfShuffles = 0
 def createDeck(numberOfDecks):
+  global numberOfShuffles
+  if (useSeed): random.seed(seed+numberOfShuffles)
   cards = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
   out = []
   for i in range(0, numberOfDecks):
     for j in range(0, len(cards)):
       for k in range(0, 4):
         out.append(cards[j])
-  shuffle(out)
+  random.shuffle(out)
+  numberOfShuffles += 1
   return out
 
 class BlackJackRound:
