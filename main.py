@@ -71,7 +71,7 @@ def userFunc(userHand, dealerHand, numberOfSplits):
 filename = "output.csv"
 initialMoney = 5000
 bet = 100
-iters = 2000
+iters = 5000
 breakWhenBroke = False
 
 
