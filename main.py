@@ -120,8 +120,6 @@ deck = createDeck(numberOfDecks)
 startingAmt = len(deck)
 money = initialMoney
 trueCount = 0
-tcfile = open(sys.argv[2], "w+")
-tcfile.write("Round,True Count\n")
 for i in range(0, iters):
   money -= bet
   round = BlackJackRound(deck, bet)
@@ -138,15 +136,13 @@ for i in range(0, iters):
     runningCount += getCardValue(card)
     outhand.append(card)
   trueCount += runningCount / numberOfDecks
-  if i < 50: tcfile.write("{},{}\n".format(i+1, trueCount))
   bet = getBet(trueCount)
   #if (i < 100):
     #print("Truecount: {}, Bet: {}, Cards: {}".format(trueCount, bet, ",".join(outhand)))
   if (len(deck) < reshuffleThreshold*startingAmt):
+    print("Deck reshuffle: {}, len: {}, sa: {}".format(i+1, len(deck), startingAmt))
     deck = createDeck(numberOfDecks)
     trueCount = 0
-    print("Deck reshuffle: {}, sa: {}".format(i+1, startingAmt))
-    print(trueCount)
 
   money += back
   history.append([i, money, ["Loss: Dealer Higher", "Win: Dealer Busted", "Win: Dealer Lower", "Tie: Dealer Equal"][outputType]])
@@ -155,7 +151,6 @@ for i in range(0, iters):
     history.append(["", "", ""])
     history.append([i, "Broke", ""])
     break;
-tcfile.close()
 print("{}/{} rounds finished".format(i+1,iters))
 file = open(filename, "w+")
 file.write("Iteration,Balance,Output Type\n")
