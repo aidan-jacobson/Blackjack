@@ -12,6 +12,7 @@ def getCardValue(card):
   if (card is "7"): return 0
   if (card is "8"): return 0
   if (card is "9"): return 0
+  if (card is "10"): return -1
   if (card is "J" or card is "Q" or card is "K" or card is "A"): return -1
 
 softTotals = [
@@ -83,10 +84,10 @@ def userFunc(userHand, dealerHand, numberOfSplits):
 filename = sys.argv[1]
 initialMoney = 5000
 bet = 5
-iters = 2000
+iters = 10000
 breakWhenBroke = False
 numberOfDecks = 6
-reshuffleThreshold = 0.25
+reshuffleThreshold = 0.15
 
 def getBet(trueCount):
   if (trueCount < -2):

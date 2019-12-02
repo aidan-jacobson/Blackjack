@@ -1,4 +1,5 @@
 # cardcounting version
+from __future__ import division
 from random import shuffle
 
 def sumCardsSoft(cardList):
@@ -12,7 +13,7 @@ def sumCardsSoft(cardList):
     if card is "7": output += 7
     if card is "8": output += 8
     if card is "9": output += 9
-    if card is "9": output += 10
+    if card is "10": output += 10
     if card in ["K", "Q", "J"]: output += 10
     if card is "A": output += 11 #count ace as 11
   return output
