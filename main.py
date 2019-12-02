@@ -70,8 +70,8 @@ def userFunc(userHand, dealerHand, numberOfSplits):
 # Parameters
 filename = "output.csv"
 initialMoney = 5000
-bet = 100
-iters = 5000
+bet = 5
+iters = 10000
 breakWhenBroke = False
 
 
